@@ -11,7 +11,7 @@ spec:
     path: drill1/charts/myapp
     helm:
       valueFiles:
-        - custome-values.yaml
+        - ../argocd-manifests/custome-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: default
