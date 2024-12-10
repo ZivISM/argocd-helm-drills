@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ZivISM/argocd-helm-drills.git
+    targetRevision: main 
+    path: drill1/charts/myapp
+    helm:
+      valueFiles:
+        - custom-values.yaml
+      parameters:
+        - name: replicaCount
+          value: "2"
+        - name: image.tag
+          value: "1.21.0"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      rollback: true
+  status:
+    healthChecks:
+      - kind: Deployment
+        apiVersion: apps/v1
+        name: myapp
+        failureThreshold: 3

@@ -5,6 +5,11 @@ metadata:
   labels:
     app: {{ .Chart.Name }}
 spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
@@ -25,3 +30,15 @@ spec:
               {{- toYaml .Values.resources.limits | nindent 12 }}
             requests:
               {{- toYaml .Values.resources.requests | nindent 12 }}
+          livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
