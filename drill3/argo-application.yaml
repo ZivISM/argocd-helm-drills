@@ -24,10 +24,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
-      rollback: true
-  status:
-    healthChecks:
-      - kind: Deployment
-        apiVersion: apps/v1
-        name: myapp
-        failureThreshold: 3
+      allowEmpty: false
+  
